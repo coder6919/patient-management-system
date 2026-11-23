@@ -1,0 +1,43 @@
+name: Natural Contribution Graph
+
+on:
+  schedule:
+    # Triggers once every day at 09:30 UTC (3:00 PM IST)
+    - cron: '30 9 * * *'
+  workflow_dispatch: # Allows manual testing
+
+permissions:
+  contents: write
+
+jobs:
+  generate-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create randomized daily commits
+        run: |
+          git config user.name "coder6919"
+          git config user.email "coder9408@gmail.com"
+          
+          # Pick a random number of commits between 1 and 8
+          COMMIT_COUNT=$(( ( RANDOM % 8 ) + 1 ))
+          echo "Generating $COMMIT_COUNT commits today..."
+
+          for (( i=1; i<=COMMIT_COUNT; i++ ))
+          do
+            # Generate a random hour (00-23) and minute (00-59) for today
+            RAND_HOUR=$(printf "%02d" $(( RANDOM % 24 )))
+            RAND_MIN=$(printf "%02d" $(( RANDOM % 60 )))
+            COMMIT_DATE="$(date -u +%Y-%m-%d)T${RAND_HOUR}:${RAND_MIN}:00Z"
+
+            echo "Update $i at $COMMIT_DATE" > activity.log
+            git add activity.log
+            
+            # Backdate the commit timestamp within today so the timing looks organic
+            GIT_AUTHOR_DATE="$COMMIT_DATE" GIT_COMMITTER_DATE="$COMMIT_DATE" \
+              git commit -m "Update log entry #$i"
+          done
+
+          git push
