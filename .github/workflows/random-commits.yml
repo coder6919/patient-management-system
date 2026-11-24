@@ -33,7 +33,7 @@ jobs:
             COMMIT_DATE="$(date -u +%Y-%m-%d)T${RAND_HOUR}:${RAND_MIN}:00Z"
 
             echo "Update $i at $COMMIT_DATE" > activity.log
-            git add activity.log
+            git add -f activity.log
             
             # Backdate the commit timestamp within today so the timing looks organic
             GIT_AUTHOR_DATE="$COMMIT_DATE" GIT_COMMITTER_DATE="$COMMIT_DATE" \
