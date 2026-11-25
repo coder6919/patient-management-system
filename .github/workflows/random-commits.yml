@@ -3,7 +3,7 @@ name: Natural Contribution Graph
 on:
   schedule:
     # Triggers once every day at 09:30 UTC (3:00 PM IST)
-    - cron: '30 9 * * *'
+    - cron: '35 9 * * *'
   workflow_dispatch: # Allows manual testing
 
 permissions:
@@ -18,6 +18,10 @@ jobs:
 
       - name: Create randomized daily commits
         run: |
+          export TZ=Asia/Kolkata
+          echo "UTC time: $(date -u)"
+          echo "IST time: $(date)"
+          echo "Trigger: $GITHUB_EVENT_NAME"
           git config user.name "coder6919"
           git config user.email "coder9408@gmail.com"
           
@@ -28,9 +32,10 @@ jobs:
           for (( i=1; i<=COMMIT_COUNT; i++ ))
           do
             # Generate a random hour (00-23) and minute (00-59) for today
-            RAND_HOUR=$(printf "%02d" $(( RANDOM % 24 )))
-            RAND_MIN=$(printf "%02d" $(( RANDOM % 60 )))
-            COMMIT_DATE="$(date -u +%Y-%m-%d)T${RAND_HOUR}:${RAND_MIN}:00Z"
+            # RAND_HOUR=$(printf "%02d" $(( RANDOM % 24 )))
+            # RAND_MIN=$(printf "%02d" $(( RANDOM % 60 )))
+            COMMIT_DATE="$(date -Iseconds)"
+            # COMMIT_DATE="$(date -u +%Y-%m-%d)T${RAND_HOUR}:${RAND_MIN}:00Z"
 
             echo "Update $i at $COMMIT_DATE" > activity.log
             git add -f activity.log
