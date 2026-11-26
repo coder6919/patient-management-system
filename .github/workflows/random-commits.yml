@@ -2,9 +2,9 @@ name: Natural Contribution Graph
 
 on:
   schedule:
-    # Triggers once every day at 09:30 UTC (3:00 PM IST)
-    - cron: '35 9 * * *'
-  workflow_dispatch: # Allows manual testing
+    - cron: '5 15 * * *'
+      timezone: 'Asia/Kolkata'
+  workflow_dispatch:
 
 permissions:
   contents: write
