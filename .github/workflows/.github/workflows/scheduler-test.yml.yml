@@ -1,0 +1,20 @@
+name: Scheduler Test
+
+on:
+  schedule:
+    - cron: '17,47 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check scheduler
+        run: |
+          echo "Scheduler is working"
+          echo "UTC: $(date -u)"
+          echo "IST: $(TZ=Asia/Kolkata date)"
+          echo "Trigger: $GITHUB_EVENT_NAME"
